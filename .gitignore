@@ -2,8 +2,6 @@
 .settings
 .project
 springboot/target
-bin
-jaxrsdoc
 .pmd
 .checkstyle
 .metadata
@@ -25,3 +23,5 @@ on-override.properties
 out
 *.toto
 dev-resources
+
+gatling/target

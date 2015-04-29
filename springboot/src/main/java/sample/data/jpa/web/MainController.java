@@ -39,89 +39,89 @@ import sample.data.jpa.service.HotelService;
 @RestController
 public class MainController {
 
-	@Autowired
-	private CityService cityService;
+    @Autowired
+    private CityService cityService;
 
-	@Autowired
-	private HotelService hotelService;
+    @Autowired
+    private HotelService hotelService;
 
-	@RequestMapping(value = "/cities", method = RequestMethod.GET)
-	@ResponseBody
-	@Transactional(readOnly = true)
-	public Page<City> findCities(@RequestParam(required = false) String name,
-								 @RequestParam(required = false) Integer page,
-								 @RequestParam(required = false) Integer size) {
-		PageRequest pageRequest = buildPageRequest(page, size);
-		CitySearchCriteria criteria = new CitySearchCriteria(name);
-		return cityService.findCities(criteria, pageRequest);
-	}
+    @RequestMapping(value = "/cities", method = RequestMethod.GET)
+    @ResponseBody
+    @Transactional(readOnly = true)
+    public Page<City> findCities(@RequestParam(required = false) String name,
+                                 @RequestParam(required = false) Integer page,
+                                 @RequestParam(required = false) Integer size) {
+        PageRequest pageRequest = buildPageRequest(page, size);
+        CitySearchCriteria criteria = new CitySearchCriteria(name);
+        return cityService.findCities(criteria, pageRequest);
+    }
 
-	@RequestMapping(value = "/country/{countryName}/city/{cityName}/hotels", method = RequestMethod.GET)
-	@ResponseBody
-	@Transactional(readOnly = true)
-	public Page<HotelSummary> geHotelsInCity(@PathVariable String cityName,
-											 @PathVariable String countryName,
-											 @RequestParam(required = false) Integer page,
-											 @RequestParam(required = false) Integer size) {
-		PageRequest pageRequest = buildPageRequest(page, size);
-		City city = getCity(cityName, countryName);
-		return cityService.getHotels(city, pageRequest);
-	}
+    @RequestMapping(value = "/country/{countryName}/city/{cityName}/hotels", method = RequestMethod.GET)
+    @ResponseBody
+    @Transactional(readOnly = true)
+    public Page<HotelSummary> geHotelsInCity(@PathVariable String cityName,
+                                             @PathVariable String countryName,
+                                             @RequestParam(required = false) Integer page,
+                                             @RequestParam(required = false) Integer size) {
+        PageRequest pageRequest = buildPageRequest(page, size);
+        City city = getCity(cityName, countryName);
+        return cityService.getHotels(city, pageRequest);
+    }
 
-	@RequestMapping(value = "/country/{countryName}/city/{cityName}/hotel/{hotelName}", method = RequestMethod.GET)
-	@ResponseBody
-	@Transactional(readOnly = true)
-	public Hotel getHotel(@PathVariable String cityName,
-						  @PathVariable String countryName,
-						  @PathVariable String hotelName) {
-		City city = getCity(cityName, countryName);
-		return getHotel(city, hotelName);
-	}
+    @RequestMapping(value = "/country/{countryName}/city/{cityName}/hotel/{hotelName}", method = RequestMethod.GET)
+    @ResponseBody
+    @Transactional(readOnly = true)
+    public Hotel getHotel(@PathVariable String cityName,
+                          @PathVariable String countryName,
+                          @PathVariable String hotelName) {
+        City city = getCity(cityName, countryName);
+        return getHotel(city, hotelName);
+    }
 
-	@RequestMapping(value = "/country/{countryName}/city/{cityName}/hotel/{hotelName}/reviews", method = RequestMethod.GET)
-	@ResponseBody
-	@Transactional(readOnly = true)
-	public Page<Review> getHotelReviews(@PathVariable String cityName,
-										@PathVariable String countryName,
-										@PathVariable String hotelName,
-										@RequestParam(required = false) Integer page,
-										@RequestParam(required = false) Integer size) {
-		PageRequest pageRequest = buildPageRequest(page, size);
-		City city = getCity(cityName, countryName);
-		Hotel hotel = getHotel(city, hotelName);
-		return hotelService.getReviews(hotel, pageRequest);
-	}
+    @RequestMapping(value = "/country/{countryName}/city/{cityName}/hotel/{hotelName}/reviews", method = RequestMethod.GET)
+    @ResponseBody
+    @Transactional(readOnly = true)
+    public Page<Review> getHotelReviews(@PathVariable String cityName,
+                                        @PathVariable String countryName,
+                                        @PathVariable String hotelName,
+                                        @RequestParam(required = false) Integer page,
+                                        @RequestParam(required = false) Integer size) {
+        PageRequest pageRequest = buildPageRequest(page, size);
+        City city = getCity(cityName, countryName);
+        Hotel hotel = getHotel(city, hotelName);
+        return hotelService.getReviews(hotel, pageRequest);
+    }
 
-	@RequestMapping(value = "/country/{countryName}/city/{cityName}/hotel/{hotelName}/reviews", method = RequestMethod.POST)
-	@Transactional(readOnly = false)
-	public void addHotelReview(@PathVariable String cityName,
-										@PathVariable String countryName,
-										@PathVariable String hotelName,
-										@RequestBody ReviewDetails review) {
-		City city = getCity(cityName, countryName);
-		Hotel hotel = getHotel(city, hotelName);
-		hotelService.addReview(hotel, review);
+    @RequestMapping(value = "/country/{countryName}/city/{cityName}/hotel/{hotelName}/reviews", method = RequestMethod.POST)
+    @Transactional(readOnly = false)
+    public void addHotelReview(@PathVariable String cityName,
+                                        @PathVariable String countryName,
+                                        @PathVariable String hotelName,
+                                        @RequestBody ReviewDetails review) {
+        City city = getCity(cityName, countryName);
+        Hotel hotel = getHotel(city, hotelName);
+        hotelService.addReview(hotel, review);
 
-	}
+    }
 
-	private Hotel getHotel(City city, String hotelName) {
-		return hotelService
-				.getHotel(city, hotelName)
-				.orElseThrow(() -> new RuntimeException("MESSAGE: can't find hotel " + hotelName));
-	}
+    private Hotel getHotel(City city, String hotelName) {
+        return hotelService
+                .getHotel(city, hotelName)
+                .orElseThrow(() -> new RuntimeException("MESSAGE: can't find hotel " + hotelName));
+    }
 
-	private City getCity(String cityName, String countryName) {
-		return cityService
-				.getCity(cityName, countryName)
-				.orElseThrow(() -> new RuntimeException("MESSAGE: can't find city " + cityName));
-	}
+    private City getCity(String cityName, String countryName) {
+        return cityService
+                .getCity(cityName, countryName)
+                .orElseThrow(() -> new RuntimeException("MESSAGE: can't find city " + cityName));
+    }
 
-	private PageRequest buildPageRequest(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
-		PageRequest pageRequest = null;
-		if (page != null && size != null) {
-			pageRequest = new PageRequest(page, size);
-		}
-		return pageRequest;
-	}
+    private PageRequest buildPageRequest(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+        PageRequest pageRequest = null;
+        if (page != null && size != null) {
+            pageRequest = new PageRequest(page, size);
+        }
+        return pageRequest;
+    }
 
 }
