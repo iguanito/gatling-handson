@@ -4,27 +4,37 @@ import io.gatling.http.Predef._
 
 class ABasicSimulation extends Simulation {
 
-    //Exercise 1 define a simple scn without httpConf then inject 10 at once.
-    val myscenario = scenario("First scenario").exec(http("request to check page").get("http://localhost:8080/does_it_work.html"))
+  //Exercise 2 define a simple scn with httpConf baseURL and http Request
+  //make 2 requests to our simulation
+  val httpConf = http.baseURL("http://localhost:8080")
+    .acceptHeader("application/json")
+    .acceptEncodingHeader("gzip, deflate")
+    .doNotTrackHeader("1")
+    .disableWarmUp
 
-    // inject trafic
-    setUp(myscenario.inject(atOnceUsers(10)))
-    //setUp(myscenario inject atOnceUsers(10))
+  val scn = scenario("My Scenario")
+    .exec(
+      http("My check request")
+        .get("/does_it_work.html") // Will actually make a request on "http://localhost:8080/does_it_work.html"
+    )
+    .exec(
+      http("My other Request")
+        .get("/country/usa/city/atlanta/hotels"))
 
-    //Exercise 2 define a simple scn with httpConf baseURL and http Request
+  setUp(scn.inject(atOnceUsers(10)).protocols(httpConf))
+  // see HttpProtocolHelper to get more configuration fields
 
-    //Exercise 3 make a complex request wih pause different request...
+  //Exercise 3 make a complex request wih pause different between requests...
 
-    //use different injection mode (user at once, ramp ...)
+  //use different injection mode (user at once, ramp ...)
 
-    //Explain simulation
+  //Explain simulation
 
-    //Exercise 4 use feeders
+  //Exercise 4 use feeders
 
-    //Exercise 5 define a new check (Default check response 20x or 304.)
+  //Exercise 5 define a new check (Default check response 20x or 304.)
 
-    // Exercise 6 define an assertion (delay)
-
+  // Exercise 6 define an assertion (delay)
 
 
 }
