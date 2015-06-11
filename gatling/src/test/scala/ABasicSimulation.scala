@@ -1,10 +1,14 @@
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
+import scala.concurrent.duration._
 
 class ABasicSimulation extends Simulation {
 
-  //Exercise 3 make a complex request wih pause different between requests...
+  //use different injection mode (user at once, ramp ...)
+
+  // See InjectionStep & InjectionSupport
+  // http://gatling.io/docs/2.0.0-RC2/general/simulation_setup.html#simulation-setup
 
   val httpConf = http.baseURL("http://localhost:8080")
     .warmUp("http://localhost:8080/does_it_work.html")
@@ -32,9 +36,8 @@ class ABasicSimulation extends Simulation {
       .body(StringBody("""{"rating": "EXCELLENT","checkInDate": "2006-01-12","tripType": "FRIENDS","title": "GREAT","details": "GuENIAL"}""")).asJSON
     )
 
-  setUp(beforeTravel.inject(atOnceUsers(10)).protocols(httpConf), afterTravel.inject(atOnceUsers(10)).protocols(httpConf))
-
-  //use different injection mode (user at once, ramp ...)
+  setUp(beforeTravel.inject(rampUsers(10) over (5 second), constantUsersPerSec(10) during (5 second)).protocols(httpConf),
+        afterTravel.inject(atOnceUsers(10)).protocols(httpConf))
 
   //Explain simulation
 
