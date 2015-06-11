@@ -1,11 +1,16 @@
 
 import io.gatling.core.Predef._
-//import io.gatling.http.Predef._
+import io.gatling.http.Predef._
 
 class ABasicSimulation extends Simulation {
 
-    //Exercise 1 define a simple scn without httpConf.
-    
+    //Exercise 1 define a simple scn without httpConf then inject 10 at once.
+    val myscenario = scenario("First scenario").exec(http("request to check page").get("http://localhost:8080/does_it_work.html"))
+
+    // inject trafic
+    setUp(myscenario.inject(atOnceUsers(10)))
+    //setUp(myscenario inject atOnceUsers(10))
+
     //Exercise 2 define a simple scn with httpConf baseURL and http Request
 
     //Exercise 3 make a complex request wih pause different request...
