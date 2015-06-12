@@ -4,11 +4,10 @@ import io.gatling.http.Predef._
 
 class ABasicSimulation extends Simulation {
 
-  //Exercise 3 make a complex request wih pause different between requests...
+  //Exercise 5 define a new check (Default check response 20x or 304.)
 
   val httpConf = http.baseURL("http://localhost:8080")
     .warmUp("http://localhost:8080/does_it_work.html")
-  // see HttpProtocolHelper to get more configuration fields
 
   val beforeTravel = scenario("Finding my hotel in Atlanta")
     .exec(
@@ -23,6 +22,7 @@ class ABasicSimulation extends Simulation {
     .exec(
       http("Get reviews on this hotel")
         .get("/country/usa/city/atlanta/hotel/Doubletree/reviews")
+        .check(status.is(200), headerRegex(HttpHeaderNames.ContentType,"application/json(.*)"), responseTimeInMillis lessThanOrEqual 200L)
     )
 
   val afterTravel = scenario("Post a review because it was a so good hotel")
@@ -34,13 +34,6 @@ class ABasicSimulation extends Simulation {
 
   setUp(beforeTravel.inject(atOnceUsers(10)).protocols(httpConf), afterTravel.inject(atOnceUsers(10)).protocols(httpConf))
 
-  //use different injection mode (user at once, ramp ...)
-
-  //Explain simulation
-
-  //Exercise 4 use feeders
-
-  //Exercise 5 define a new check (Default check response 20x or 304.)
 
   // Exercise 6 define an assertion (delay)
 

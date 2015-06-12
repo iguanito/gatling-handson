@@ -16,6 +16,8 @@
 
 package sample.data.jpa.web;
 
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -89,7 +91,21 @@ public class MainController {
         PageRequest pageRequest = buildPageRequest(page, size);
         City city = getCity(cityName, countryName);
         Hotel hotel = getHotel(city, hotelName);
+
+        sleepRandomlyForMillis(300);
+
         return hotelService.getReviews(hotel, pageRequest);
+    }
+
+    private void sleepRandomlyForMillis(int milliseconds) {
+        int randomInt = new Random().nextInt(5);
+        if(randomInt == 4){
+            try {
+                TimeUnit.MILLISECONDS.sleep(milliseconds);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @RequestMapping(value = "/country/{countryName}/city/{cityName}/hotel/{hotelName}/reviews", method = RequestMethod.POST)
