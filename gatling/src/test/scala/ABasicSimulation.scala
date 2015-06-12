@@ -4,7 +4,7 @@ import io.gatling.http.Predef._
 
 class ABasicSimulation extends Simulation {
 
-  //Exercise 5 define a new check (Default check response 20x or 304.)
+  // Exercise 6 define an assertion (delay)
 
   val httpConf = http.baseURL("http://localhost:8080")
     .warmUp("http://localhost:8080/does_it_work.html")
@@ -33,9 +33,6 @@ class ABasicSimulation extends Simulation {
     )
 
   setUp(beforeTravel.inject(atOnceUsers(10)).protocols(httpConf), afterTravel.inject(atOnceUsers(10)).protocols(httpConf))
-
-
-  // Exercise 6 define an assertion (delay)
-
+    .assertions(forAll.failedRequests.percent.is(0))
 
 }
