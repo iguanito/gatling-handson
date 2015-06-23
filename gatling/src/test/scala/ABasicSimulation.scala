@@ -6,7 +6,7 @@ class ABasicSimulation extends Simulation {
 
   //Exercise 2 define a simple scn with httpConf baseURL and http Request
   //make 2 requests to our simulation
-  val httpConf = http.baseURL("http://localhost:8080")
+  val httpConf = http.baseURL("${baseApi}")
     .acceptCharsetHeader("application/json")
     .acceptEncodingHeader("gzip, deflate")
     .doNotTrackHeader("1")
