@@ -1,5 +1,6 @@
 This project aims to learn how to use gatling as a stress tool. The system under test is a tiny Springboot
-web application.    
+web application.
+
 This application is an hotel reservation website.
 
 Requirements
@@ -21,16 +22,20 @@ http://localhost:8080/does_it_work.html
 Simulation
 ==========
 
-1. Cherche un hotel a atlanta
+An example scenario of a user hotel reservation
+
+1. Find a hotel in atlanta  
 GET http://localhost:8080/country/usa/city/atlanta/hotels
 
-2. Regarde les détails de l'hotel Doubletree à atlanta
+2. Look details for Doubletree hotel in Atlanta  
 GET http://localhost:8080/country/usa/city/atlanta/hotel/Doubletree
 
-3. Regarde les détails des reviews sur cet hotel
+3. Have a look at hotel reviews  
 GET http://localhost:8080/country/usa/city/atlanta/hotel/Doubletree/reviews
 
-4. POSTER une review 
+Weeks later...
+
+4. Post review to this hotel  
 POST http://localhost:8080/country/usa/city/atlanta/hotel/Doubletree/reviews
 
 {"rating": "EXCELLENT",
@@ -39,8 +44,6 @@ POST http://localhost:8080/country/usa/city/atlanta/hotel/Doubletree/reviews
             "title": "GREAT",
             "details": "GuENIAL"
 }
-
-http://localhost:8080/cities
 
 
 
